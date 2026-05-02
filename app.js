@@ -1286,10 +1286,22 @@ document.querySelectorAll(".mode-button").forEach((button) => {
 startQuizButton.addEventListener("click", () => {
   state.started = true;
   state.currentQuestionStartedAt = Date.now();
-  introPanel.hidden = true;
-  showJourneyMessage("Ready?", "دەست پێ بکە و streak ـەکەت دروست بکە.");
-  document.getElementById("quiz-app").scrollIntoView({ behavior: "smooth", block: "start" });
-  renderQuiz();
+  introPanel.style.transition = "opacity 350ms ease, transform 350ms ease";
+  introPanel.style.opacity = "0";
+  introPanel.style.transform = "translateY(-12px) scale(0.97)";
+  setTimeout(() => {
+    introPanel.hidden = true;
+    introPanel.style.removeProperty("opacity");
+    introPanel.style.removeProperty("transform");
+    introPanel.style.removeProperty("transition");
+    showJourneyMessage("Ready?", "دەست پێ بکە و streak ـەکەت دروست بکە.");
+    renderQuiz();
+    // Scroll to the question panel itself, not the section top
+    const qPanel = document.querySelector(".question-panel");
+    if (qPanel) {
+      qPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 380);
 });
 
 finishButton.addEventListener("click", () => {
