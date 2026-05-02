@@ -939,6 +939,8 @@ function renderOptions(question) {
     `;
 
     button.addEventListener("click", () => {
+      // Lock answer — don't allow changing once answered
+      if (state.selections[question.number]) return;
       const responseTime = Math.max(Date.now() - state.currentQuestionStartedAt, 300);
       state.responseTimes.push(responseTime);
       state.selections[question.number] = key;
@@ -962,11 +964,7 @@ function renderOptions(question) {
       clearAutoAdvance();
       renderQuiz();
 
-      if (state.currentIndex < state.questionPool.length - 1) {
-        state.autoAdvanceTimer = setTimeout(() => {
-          animateQuestionChange(state.currentIndex + 1);
-        }, 380);
-      }
+      // No auto-advance — user clicks Next manually
     });
 
     optionList.appendChild(button);
